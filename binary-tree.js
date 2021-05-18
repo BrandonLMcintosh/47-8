@@ -56,8 +56,7 @@ class BinaryTree {
 			if (!node) return 0;
 			const left = helper(node.left);
 			const right = helper(node.right);
-			const higher = Math.max(0, left, right);
-			total = higher + node.val;
+			total = Math.max(total, node.val + left + right);
 			return Math.max(0, node.val + left, node.val + right);
 		}
 
@@ -68,7 +67,26 @@ class BinaryTree {
 	/** nextLarger(lowerBound): return the smallest value in the tree
 	 * which is larger than lowerBound. Return null if no such value exists. */
 
-	nextLarger(lowerBound) {}
+	nextLarger(lowerBound) {
+		if (this.root) {
+			let next = null;
+			function helper(node) {
+				if (node) {
+					if (node.val > lowerBound) {
+						if (node.val < next || next === null) {
+							next = node.val;
+						}
+					}
+					helper(node.left);
+					helper(node.right);
+				}
+			}
+
+			helper(this.root);
+			return next;
+		}
+		return null;
+	}
 
 	/** Further study!
 	 * areCousins(node1, node2): determine whether two nodes are cousins
